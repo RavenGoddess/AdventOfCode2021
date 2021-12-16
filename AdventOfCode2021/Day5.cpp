@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 
+// use dictionary = std::map, std::unorderedMap
+// get direction (vector) between two points
 int HydrothermalVenture(const std::string & inputpath, const bool parse)
 {
 	std::vector<vent> ventCoords;

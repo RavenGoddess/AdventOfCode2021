@@ -3,6 +3,11 @@
 #include <fstream>
 #include <iostream>
 
+/*
+TO DO: 
+- stoull instead of manual conversion
+- use reserve and fill in InitializeArrayInt
+*/
 long long BinaryDiagnostic1(const std::string &inputpath)
 {
 	std::vector<int> zeroes;
@@ -28,13 +33,13 @@ long long BinaryDiagnostic1(const std::string &inputpath)
 			std::cout << "Input exception: Bits at position " << i << " have equal amount!";
 		}
 	}
-	return ConvertBinToDec(stoll(gamma))*ConvertBinToDec(stoll(epsilon));
+	return stoull(gamma, 0, 2)* stoull(epsilon, 0, 2);
 }
 
 long long BinaryDiagnostic2(const std::string &inputpath)
 {
 	const std::vector<std::string> input = ProcessInput(inputpath);
-	const int size = input[0].size();
+	const size_t size = input[0].size();
 	std::vector<std::string> o2 = input, co2 = input;
 
 	int i = 0;
@@ -51,10 +56,10 @@ long long BinaryDiagnostic2(const std::string &inputpath)
 		i++;
 	}
 
-	return ConvertBinToDec(stoll(o2[0]))*ConvertBinToDec(stoll(co2[0]));
+	return stoull(o2[0], 0, 2) * stoull(co2[0], 0, 2);
 }
 
-std::vector<int> InitializeArrayInt(int size)
+std::vector<int> InitializeArrayInt(size_t size)
 {
 	std::vector<int> init;
 

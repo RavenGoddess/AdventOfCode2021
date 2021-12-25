@@ -1,63 +1,59 @@
 #include "Day1.h"
 #include "Helpers.h"
-#include <fstream>
+#include <algorithm>
 
-int SonarSweep1(const std::string &inputpath)
+size_t SonarSweep1(const std::string &inputpath)
 {
-	std::ifstream input;
-	std::string line;
 	int oldnum = -1;
-	int sum = 0;
+	size_t sum = 0;
 
-	input.open(inputpath);
-	if (input.is_open())
+	std::vector<std::string> input = ProcessInput(inputpath);
+	for (auto& elem : input)
 	{
-		while (std::getline(input, line))
+		int newnum = std::stoi(elem);
+		if (oldnum != -1 && newnum > oldnum)
 		{
-			int newnum = std::stoi(line);
-			if (oldnum != -1 && newnum > oldnum)
-			{
-				sum++;
-			}
-			oldnum = newnum;
+			sum++;
 		}
-		input.close();
+		oldnum = newnum;
 	}
 
 	return sum;
 }
 
-int SonarSweep2(const std::string &inputpath)
+size_t SonarSweep2(const std::string &inputpath)
 {
-	std::ifstream input;
-	std::string line;
+	std::vector<int> window = { -1, -1, -1, -1 };
+	size_t index = window.size() - 1;
+	size_t sum = 0;
 
-	int num1 = -1, num2 = -1, num3 = -1, num4 = -1;
-	int windowold, windownew;
-	int sum = 0;
-
-	input.open(inputpath);
-	if (input.is_open())
+	std::vector<std::string> input = ProcessInput(inputpath);
+	for (auto& elem : input)
 	{
-		while (std::getline(input, line))
-		{
-			num1 = num2;
-			num2 = num3;
-			num3 = num4;
-			num4 = std::stoi(line);
+		std::rotate(window.begin(), window.begin() + 1, window.end());
+		window[index] = std::stoi(elem);
 
-			if (num1 != -1 && num2 != -1 && num3 != -1 && num4 != -1)
+		if (WindowFilled(window))
+		{
+			// except for first and last element, they are the same for both windows
+			if (window[index] > window[0])
 			{
-				windowold = num1 + num2 + num3;
-				windownew = num2 + num3 + num4;
-				if (windownew > windowold)
-				{
-					sum++;
-				}
+				sum++;
 			}
 		}
-		input.close();
 	}
 
 	return sum;
+}
+
+bool WindowFilled(const std::vector<int>& window)
+{
+	for (auto& elem : window)
+	{
+		if (elem == -1)
+		{
+			return false;
+		}
+	}
+	return true;
 }
